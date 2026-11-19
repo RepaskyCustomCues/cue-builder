@@ -727,6 +727,20 @@ select[data-choice]:disabled { opacity: 0.45; }
 
 .ring-design-sheet { display: none; }
 
+.pdf-sheet,
+.pdf-sheet .spec,
+.pdf-sheet .spec * {
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+}
+
+.pdf-sheet,
+.pdf-sheet .spec,
+.pdf-sheet .ring-design-sheet,
+.pdf-sheet input {
+  background: #ffffff !important;
+}
+
 .ring-design-sheet h2 {
   margin: 16px 0 8px;
   font-family: var(--serif);

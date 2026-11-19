@@ -1278,6 +1278,7 @@ async function buildPrintPdf() {
 
   const sheet = document.createElement("div");
   sheet.style.width = "720px";
+  sheet.className = "pdf-sheet";
   sheet.style.background = "#fff";
   sheet.style.color = "#111";
 
@@ -1307,22 +1308,42 @@ async function buildPrintPdf() {
   spec.querySelectorAll("[id]").forEach((node) => node.removeAttribute("id"));
   spec.style.border = "0";
   spec.style.overflow = "visible";
-  spec.style.background = "#fff";
+  inkPdfSheet(spec);
   sheet.append(figure, spec);
-  document.body.append(sheet);
+  document.body.prepend(sheet);
   await image.decode();
   sheet.getBoundingClientRect();
+  const scrollX = window.scrollX;
+  const scrollY = window.scrollY;
+  window.scrollTo(0, 0);
   try {
     return await html2pdf().set({
       margin: [0.4, 0.4, 0.4, 0.4],
       image: { type: "jpeg", quality: 0.92 },
-      html2canvas: { scale: 2, backgroundColor: "#ffffff", useCORS: true },
+      html2canvas: { scale: 2, backgroundColor: "#ffffff", useCORS: true, scrollX: 0, scrollY: 0 },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
       pagebreak: { mode: ["css", "legacy"] },
     }).from(sheet).outputPdf("blob");
   } finally {
     sheet.remove();
+    window.scrollTo(scrollX, scrollY);
   }
+}
+
+/* The shop page uses white type on a dark ground. The PDF sheet is white,
+   so every line is painted in dark ink. A scrolled phone otherwise captures
+   that type as white on white. */
+function inkPdfSheet(spec) {
+  const ink = (node) => {
+    node.style.color = "#111111";
+    node.style.webkitTextFillColor = "#111111";
+  };
+  spec.style.background = "#ffffff";
+  ink(spec);
+  spec.querySelectorAll("*").forEach((node) => {
+    ink(node);
+    if (node.tagName === "INPUT") node.style.background = "#ffffff";
+  });
 }
 
 function submitDesign() {
