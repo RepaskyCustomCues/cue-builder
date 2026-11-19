@@ -310,7 +310,7 @@ function phoneLayout() {
 }
 
 function stageCaption() {
-  if (phoneLayout()) return "Drag to turn the cue. Tap a wood, then tap where it goes.";
+  if (phoneLayout()) return "Drag to move the cue. Tap a wood, then tap where it goes.";
   return "Drag to rotate. Right-click drag to pan. Scroll to zoom. Drag a wood onto the cue.";
 }
 
@@ -471,6 +471,7 @@ function partLabel(x) {
 }
 
 function cueAriaLabel() {
+  if (phoneLayout()) return `${state.name}. Drag to move the cue. Use the view buttons to turn it.`;
   return `${state.name}. Drag to rotate the cue. Right-click drag to pan.`;
 }
 

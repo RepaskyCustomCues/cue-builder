@@ -48,7 +48,7 @@ function createCueView() {
   canvas.addEventListener("pointerdown", (event) => {
     if (event.button !== 0 && event.button !== 2) return;
     dragging = true;
-    panning = event.button === 2;
+    panning = event.button === 2 || window.matchMedia("(max-width: 860px)").matches;
     lastX = event.clientX;
     lastY = event.clientY;
     canvas.setPointerCapture(event.pointerId);
