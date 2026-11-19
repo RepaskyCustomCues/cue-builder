@@ -621,8 +621,8 @@ function normalize(input) {
     next.wrapColor = keep(wrap.colors, next.wrapColor, wrap.colors[0].id);
   }
   next.handleWood = keep(catalog.woods, input.handleWood, next.butt);
-  if (next.points === "seven") next.points = "six";
-  next.points = keep(catalog.points, next.points, "none");
+  if (next.points === "seven" || next.points === "none") next.points = next.points === "seven" ? "six" : "four";
+  next.points = keep(catalog.points, next.points, "four");
   const askedForButtPoints = input.sleevePoints === "match";
   const buttHadPoints = Boolean(input.sleevePoints) && input.sleevePoints !== "none" && input.sleevePoints !== "match";
   if (askedForButtPoints && next.points === "none") next.points = "four";
@@ -879,7 +879,7 @@ function renderTipBrands() {
 
 function renderPointCount() {
   const select = document.getElementById("point-count");
-  select.replaceChildren(...catalog.points.map((item) => {
+  select.replaceChildren(...catalog.points.filter((item) => item.id !== "none").map((item) => {
     const option = document.createElement("option");
     option.value = item.id;
     const amount = pointCharge(item.count, false);
