@@ -144,6 +144,10 @@ function init() {
   });
   document.getElementById("copy-spec").addEventListener("click", copySpec);
   document.getElementById("submit-design").addEventListener("click", submitDesign);
+  document.getElementById("contact-form").addEventListener("submit", sendContactedDesign);
+  document.getElementById("contact-cancel").addEventListener("click", () => {
+    document.getElementById("contact-dialog").close();
+  });
   document.getElementById("ring-design").addEventListener("click", openRingDesign);
   document.getElementById("ring-design-close").addEventListener("click", () => {
     document.getElementById("ring-design-dialog").close();
@@ -1208,9 +1212,31 @@ function renderSpec(items) {
   syncRingDesignSheet();
 }
 
+function contactDetails() {
+  const sheet = document.getElementById("contact-sheet");
+  if (!sheet || sheet.hidden) return null;
+  return {
+    name: document.getElementById("contact-sheet-name").textContent,
+    phone: document.getElementById("contact-sheet-phone").textContent,
+    email: document.getElementById("contact-sheet-email").textContent,
+  };
+}
+
+function showContact(name, phone, email) {
+  document.getElementById("contact-sheet-name").textContent = name;
+  document.getElementById("contact-sheet-phone").textContent = phone;
+  document.getElementById("contact-sheet-email").textContent = email;
+  document.getElementById("contact-sheet").hidden = false;
+}
+
 function buildSheetText() {
   const playing = document.getElementById("playing").textContent;
-  const lines = [state.name, "", playing, ""];
+  const contact = contactDetails();
+  const lines = [];
+  if (contact) {
+    lines.push(`Name — ${contact.name}`, `Phone — ${contact.phone}`, `Email — ${contact.email}`, "");
+  }
+  lines.push(state.name, "", playing, "");
   for (const item of lastItems) {
     lines.push(`${item.label} — ${item.amount ? money(item.amount) : "Included"}`);
   }
@@ -1300,6 +1326,23 @@ async function buildPrintPdf() {
 }
 
 function submitDesign() {
+  const dialog = document.getElementById("contact-dialog");
+  if (!dialog.open) dialog.showModal();
+}
+
+function sendContactedDesign(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const name = form.elements.name.value.trim();
+  const phone = form.elements.phone.value.trim();
+  const email = form.elements.email.value.trim();
+  if (!name || !phone || !email || !form.reportValidity()) return;
+  showContact(name, phone, email);
+  document.getElementById("contact-dialog").close();
+  sendDesign();
+}
+
+function sendDesign() {
   const button = document.getElementById("submit-design");
   const note = document.getElementById("submit-note");
   const previous = button.textContent;
@@ -1310,8 +1353,14 @@ function submitDesign() {
   buildPrintPdf().then((pdf) => {
     button.textContent = "Sending…";
     const form = new FormData();
+    const contact = contactDetails();
     form.append("_subject", subject);
     form.append("_captcha", "false");
+    if (contact) {
+      form.append("name", contact.name);
+      form.append("phone", contact.phone);
+      form.append("email", contact.email);
+    }
     form.append("message", buildSheetText());
     form.append("attachment", new File([pdf], designFileName(), { type: "application/pdf" }));
     return fetch("https://formsubmit.co/builds@repaskycustomcues.com", {

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Repasky Custom Cues Cue Builder</title>
-  <link rel="stylesheet" href="styles.css?v=28">
+  <link rel="stylesheet" href="styles.css?v=29">
 </head>
 <body>
   <header class="page-header">
@@ -196,6 +196,12 @@
       <aside class="spec" id="spec">
         <p class="spec-kicker">Shop estimate</p>
         <p id="estimate" class="estimate">$0</p>
+        <div id="contact-sheet" class="contact-sheet" hidden>
+          <p class="contact-kicker">Contact</p>
+          <p><span>Name</span> <strong id="contact-sheet-name"></strong></p>
+          <p><span>Phone</span> <strong id="contact-sheet-phone"></strong></p>
+          <p><span>Email</span> <strong id="contact-sheet-email"></strong></p>
+        </div>
         <label class="name-label" for="cue-name">Cue name
           <input id="cue-name" maxlength="40" autocomplete="off">
         </label>
@@ -244,6 +250,26 @@
     <button type="button" id="epoxy-done">Done</button>
   </dialog>
 
+  <dialog id="contact-dialog">
+    <form id="contact-form">
+      <p class="epoxy-title">Contact</p>
+      <p class="contact-lead">Add the person to reach about this cue. These details go on the shop estimate.</p>
+      <label class="name-label" for="contact-name">Name
+        <input id="contact-name" name="name" autocomplete="name" required>
+      </label>
+      <label class="name-label" for="contact-phone">Phone number
+        <input id="contact-phone" name="phone" type="tel" autocomplete="tel" required>
+      </label>
+      <label class="name-label" for="contact-email">Email address
+        <input id="contact-email" name="email" type="email" autocomplete="email" required>
+      </label>
+      <div class="contact-actions">
+        <button type="submit">Send design</button>
+        <button type="button" id="contact-cancel" class="secondary">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
   <dialog id="ring-design-dialog">
     <div class="render-bar">
       <p class="render-title">Ring design</p>
@@ -259,6 +285,6 @@
   <script src="cue3d.js?v=15"></script>
   <script src="logo-mark.js?v=1"></script>
   <script src="html2pdf.bundle.min.js?v=1"></script>
-  <script src="app.js?v=75"></script>
+  <script src="app.js?v=76"></script>
 </body>
 </html>

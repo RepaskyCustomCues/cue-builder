@@ -772,6 +772,64 @@ select[data-choice]:disabled { opacity: 0.45; }
 
 #render-view:active { cursor: grabbing; }
 
+.contact-sheet {
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.contact-sheet p { margin: 2px 0; }
+
+.contact-kicker {
+  margin: 0 0 4px;
+  color: var(--brass);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.contact-sheet span {
+  display: inline-block;
+  min-width: 52px;
+  color: var(--muted);
+}
+
+#contact-dialog {
+  width: min(420px, calc(100vw - 32px));
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+}
+
+#contact-dialog::backdrop { background: rgba(36, 28, 21, 0.45); }
+
+#contact-dialog .name-label { margin-bottom: 12px; }
+
+.contact-lead {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.contact-actions { display: flex; gap: 8px; }
+
+.contact-actions button {
+  flex: 1;
+  padding: 8px 12px;
+  border: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  cursor: pointer;
+}
+
+.contact-actions button.secondary {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+}
+
 #epoxy-dialog {
   padding: 16px;
   border: 1px solid var(--line);
@@ -896,6 +954,7 @@ select[data-choice]:disabled { opacity: 0.45; }
   .stage-tools,
   #render-dialog,
   #ring-design-dialog,
+  #contact-dialog,
   .actions { display: none !important; }
   .stage {
     display: block;
