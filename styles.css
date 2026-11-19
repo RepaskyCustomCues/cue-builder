@@ -848,20 +848,20 @@ select[data-choice]:disabled { opacity: 0.45; }
   #builder,
   .spec { overflow: visible; }
   .stage { order: -1; height: auto; margin-bottom: 16px; }
-  .stage-model { min-height: 52vh; }
-  #cue { height: auto; min-height: 42vh; }
+  .stage-model { min-height: 0; flex: none; }
+  #cue { height: auto; min-height: 62vh; flex: none; }
   .stage-tools { flex-wrap: wrap; }
   .zoom-tools { display: flex; }
   .stage-tools button { padding: 10px 12px; }
   .legend button { padding: 8px 0; }
-  .stage-woods { flex: none; min-height: 188px; overflow: visible; }
-  .wood-label { flex-direction: column; align-items: flex-start; gap: 0; }
-  .wood-label .stage-caption { white-space: normal; }
-  .swatches.wood-tray { overflow-x: auto; }
+  .stage-woods { flex: none; height: auto; min-height: 0; overflow: hidden; }
+  .wood-label { flex-direction: column; align-items: flex-start; gap: 2px; padding-bottom: 6px; }
+  .wood-label .stage-caption { white-space: normal; overflow: visible; text-overflow: unset; }
+  .swatches.wood-tray { flex: none; height: 156px; min-height: 156px; overflow-x: auto; overflow-y: hidden; }
   .wood-tray .swatch {
     flex: 0 0 104px;
     width: 104px;
-    height: 148px;
+    height: 156px;
   }
   .wood-tray .swatch.is-armed { box-shadow: inset 0 0 0 3px #fff; }
   .actions button { flex: 1 1 calc(50% - 8px); padding: 12px 10px; }
