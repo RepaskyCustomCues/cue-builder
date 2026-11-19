@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ring Designer · Repasky Custom Cues</title>
+  <link rel="stylesheet" href="styles.css?v=23">
+</head>
+<body>
+  <header class="page-header">
+    <a href="../index.html"><img class="logo" src="../logo.jpg?v=2" alt="Repasky Custom Cues"></a>
+    <div>
+      <h1>Ring Designer</h1>
+      <p class="lede">Start with the center layer. Add rings on the butt side or the joint side.</p>
+    </div>
+  </header>
+
+  <main class="designer">
+    <section class="controls">
+      <h2 id="layer-heading">Center layer</h2>
+      <div class="modes" role="group" aria-label="Layer face">
+        <button type="button" id="mode-plain">Plain</button>
+        <button type="button" id="mode-grooved">Grooves for inlays</button>
+        <button type="button" id="mode-dots">Dots for inlays</button>
+      </div>
+      <div id="groove-controls">
+        <label><span id="count-label">Grooves per 360°</span>
+          <input id="groove-count" type="number" min="1" max="36" step="1">
+        </label>
+        <div id="groove-only">
+          <label>Groove width (inches)
+            <input id="groove-width" type="number" min="0.05" max="0.25" step="0.005">
+          </label>
+          <label>Angle to the axis
+            <input id="groove-lean" type="range" min="-45" max="45" step="1">
+            <output id="lean-out" for="groove-lean"></output>
+          </label>
+        </div>
+        <div id="dot-only">
+          <label id="dot-diameter-row">Dot diameter
+            <select id="dot-diameter">
+              <option value="0.050">0.050</option>
+              <option value="0.078">0.078</option>
+              <option value="0.125">0.125</option>
+            </select>
+            <span>in</span>
+          </label>
+          <label class="check-line"><input type="checkbox" id="dot-pattern"> Size pattern, repeated in each quadrant</label>
+          <div id="dot-pattern-editor" hidden>
+            <ol id="dot-pattern-list"></ol>
+            <button type="button" id="dot-pattern-add">Add a size</button>
+          </div>
+        </div>
+        <label><span id="angle-label">Angle between grooves (degrees)</span>
+          <input id="groove-angle" type="number" min="10" max="360" step="0.1">
+        </label>
+        <p class="note" id="inlay-note">Spacing is the count around the ring, or the angle between grooves. 0° to the axis keeps each groove parallel to the center. It can lean up to 45° either way.</p>
+      </div>
+      <label>Layer thickness (inches)
+        <select id="thickness-choice"></select>
+        <input id="thickness" type="number" min="0.04" max="0.75" step="0.01">
+      </label>
+
+      <h2>Stack</h2>
+      <p class="note">Drag a ring to change its order. Butt side is left. Joint side is right. The center layer stays marked.</p>
+      <div class="add-row">
+        <button type="button" id="add-left-new">New ring on the butt side</button>
+        <button type="button" id="add-left-copy">Duplicate center on the butt side</button>
+      </div>
+      <ol id="stack"></ol>
+      <div class="add-row">
+        <button type="button" id="add-right-copy">Duplicate center on the joint side</button>
+        <button type="button" id="add-right-new">New ring on the joint side</button>
+      </div>
+
+      <h2>Inlay</h2>
+      <p class="note">Fills the grooves or dots on the selected layer.</p>
+      <div id="inlays"></div>
+    </section>
+
+    <div class="stage">
+    <section class="sheet" aria-label="Mechanical drawing">
+      <div class="sheet-options">
+        <label class="sheet-option"><input type="checkbox" id="hidden-lines"> Hidden lines</label>
+      </div>
+      <div class="views">
+        <figure>
+          <figcaption>Top</figcaption>
+          <canvas id="view-front"></canvas>
+        </figure>
+        <figure>
+          <figcaption>Front</figcaption>
+          <canvas id="view-top"></canvas>
+        </figure>
+        <figure class="iso">
+          <figcaption>3D isometric</figcaption>
+          <canvas id="view-iso"></canvas>
+        </figure>
+      </div>
+      <footer class="titleblock">
+        <div>
+          <strong>Repasky Custom Cues</strong>
+          <span id="stack-price">Straight rings · $10</span>
+        </div>
+        <div class="placement">
+          <p class="placement-title">Check boxes for ring placement</p>
+          <div class="stack-positions" id="stack-positions">
+            <label class="sheet-option"><input type="checkbox" value="buttRing" checked> Butt ring</label>
+            <label class="sheet-option"><input type="checkbox" value="sleeveRing" checked> Sleeve ring</label>
+            <label class="sheet-option"><input type="checkbox" value="aJointRing" checked> A-Joint ring</label>
+            <label class="sheet-option"><input type="checkbox" value="rings" checked> Joint ring</label>
+            <label class="sheet-option"><input type="checkbox" value="shaftRing" checked> Shaft ring</label>
+          </div>
+        </div>
+        <div class="title-actions">
+          <button type="button" id="undo-ring" disabled>Undo</button>
+          <button type="button" id="copy-ring">Copy stack</button>
+          <div class="cue-actions">
+            <button type="button" id="add-to-cue">Add to cue</button>
+            <a id="esc-cue" href="../index.html">ESC</a>
+          </div>
+        </div>
+      </footer>
+    </section>
+    <section class="material-tray" aria-label="Material">
+      <div class="material-label">
+        <h2>Material</h2>
+        <p id="material-note">The selected layer.</p>
+      </div>
+      <div id="materials"></div>
+    </section>
+    </div>
+  </main>
+
+  <script src="materials.js?v=2"></script>
+  <script src="ring-designer.js?v=45"></script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Repasky Custom Cues Cue Builder</title>
+  <link rel="stylesheet" href="styles.css?v=23">
+</head>
+<body>
+  <header class="page-header">
+    <img class="logo" src="logo.jpg?v=2" alt="Repasky Custom Cues">
+    <div>
+      <h1>Repasky Custom Cues Cue Builder</h1>
+      <p class="lede">Choose your options and watch the model update.</p>
+    </div>
+  </header>
+
+  <main class="layout">
+      <form id="builder">
+        <fieldset id="section-preset">
+          <legend>Preset configurations:</legend>
+          <div id="opt-preset" class="presets"></div>
+        </fieldset>
+
+        <fieldset id="section-points">
+          <legend>Forearm points</legend>
+          <label class="point-count" for="point-count">Number of points
+            <select id="point-count"></select>
+          </label>
+          <h2 class="subhead">Distance from the handle</h2>
+          <p class="help">The points start at the end of the handle and stop this far past it, including the veneers.</p>
+          <p id="point-reach-hint" class="note" hidden>Pick a point style to set where the points stop.</p>
+          <label class="weight" id="point-reach-label">
+            <span>Stop</span>
+            <output id="point-reach-out" for="point-reach"></output>
+            <input id="point-reach" type="range" min="5" max="10" step="1" value="7">
+          </label>
+          <h2 class="subhead">Other point material</h2>
+          <p id="point-hint" class="note" hidden>Pick a point style on the forearm or the butt. Woods are under the cue.</p>
+          <select id="opt-pointWood" data-choice="pointWood"></select>
+          <h2 class="subhead">Veneers</h2>
+          <p id="veneer-hint" class="note" hidden>Pick a point style on the forearm or the butt to add veneers.</p>
+          <select id="opt-veneers" data-choice="veneers"></select>
+          <p id="veneer-color-hint" class="note" hidden>Pick one or more veneers to choose a color.</p>
+          <div id="veneer-colors" class="veneer-colors">
+            <div class="veneer-label" id="veneer-label-1">
+              <span>1st veneer</span>
+              <button type="button" class="veneer-current" id="veneer-1" data-state="veneer1" aria-haspopup="listbox" aria-expanded="false"></button>
+              <div class="veneer-menu" id="veneer-menu-1" role="listbox" hidden></div>
+            </div>
+            <div class="veneer-label" id="veneer-label-2">
+              <span>2nd veneer</span>
+              <button type="button" class="veneer-current" id="veneer-2" data-state="veneer2" aria-haspopup="listbox" aria-expanded="false"></button>
+              <div class="veneer-menu" id="veneer-menu-2" role="listbox" hidden></div>
+            </div>
+            <div class="veneer-label" id="veneer-label-3">
+              <span>3rd veneer</span>
+              <button type="button" class="veneer-current" id="veneer-3" data-state="veneer3" aria-haspopup="listbox" aria-expanded="false"></button>
+              <div class="veneer-menu" id="veneer-menu-3" role="listbox" hidden></div>
+            </div>
+          </div>
+          <p id="veneer-order-note" class="note">1st is the outside layer. 2nd and 3rd sit inside it, toward the point.</p>
+        </fieldset>
+
+        <fieldset id="section-butt">
+          <legend>Butt</legend>
+          <p class="help">Plain leaves the sleeve as one wood. Points uses the same number as the forearm and the same veneers. The same blank is used for both Forearm and Sleeve.</p>
+          <select id="opt-sleevePoints" data-choice="sleevePoints"></select>
+          <h2 class="subhead">Butt Diameter</h2>
+          <select id="opt-buttProfile" data-choice="buttProfile"></select>
+          <h2 class="subhead">Butt cap</h2>
+          <select id="opt-buttCap" data-choice="buttCap"></select>
+        </fieldset>
+
+        <fieldset id="section-wrap">
+          <legend>Wrap</legend>
+          <select id="opt-wrap" data-choice="wrap"></select>
+        </fieldset>
+
+        <fieldset id="section-rings">
+          <legend>Rings</legend>
+          <p class="note">Design your own custom rings with our</p>
+          <a class="tool-link" href="ring-designer/index.html">Ring designer</a>
+          <p class="note">or choose standard elegant simple rings.</p>
+          <h2 class="subhead">Butt ring</h2>
+          <p class="help">Where the butt cap meets the butt sleeve.</p>
+          <select id="opt-buttRing" data-choice="buttRing"></select>
+          <h2 class="subhead">Sleeve ring</h2>
+          <p class="help">Between the handle and the butt sleeve.</p>
+          <select id="opt-sleeveRing" data-choice="sleeveRing"></select>
+          <h2 class="subhead">A-Joint ring</h2>
+          <p class="help">Between the forearm and the handle.</p>
+          <select id="opt-aJointRing" data-choice="aJointRing"></select>
+          <h2 class="subhead">Joint ring</h2>
+          <p class="help">Between the forearm and the shaft.</p>
+          <select id="opt-rings" data-choice="rings"></select>
+          <div id="shaft-ring-option">
+            <h2 class="subhead">Shaft ring</h2>
+            <p class="help">Just past the joint, on the shaft.</p>
+            <select id="opt-shaftRing" data-choice="shaftRing"></select>
+          </div>
+        </fieldset>
+
+        <fieldset id="section-joint">
+          <legend>Joint</legend>
+          <p class="help">How the butt screws onto the shaft.</p>
+          <select id="opt-joint" data-choice="joint"></select>
+          <p id="joint-note" class="note"></p>
+          <h2 class="subhead">Joint end</h2>
+          <p class="help">The end of the butt at the joint. Plain is the same wood as the forearm.</p>
+          <select id="opt-jointEnd" data-choice="jointEnd"></select>
+        </fieldset>
+
+        <fieldset id="section-shaft">
+          <legend>Shaft</legend>
+          <p class="help">No shaft is the butt only. A wood shaft or a carbon fiber shaft adds the playing half.</p>
+          <select id="opt-shaft" data-choice="shaft"></select>
+          <div id="shaft-details">
+            <h2 class="subhead">Shaft length</h2>
+            <p class="help">The butt is always 29 in. The shaft can be 29 or 30 in.</p>
+            <select id="opt-shaftLength" data-choice="shaftLength"></select>
+            <h2 class="subhead">Taper</h2>
+            <select id="opt-taper" data-choice="taper"></select>
+            <p id="taper-note" class="note"></p>
+          </div>
+        </fieldset>
+
+        <fieldset id="section-tip">
+          <legend>Tip</legend>
+          <label class="point-count" for="tip-brand">Tip brand
+            <select id="tip-brand"></select>
+          </label>
+          <p class="help">The tip is what hits the ball. Tip width changes the model.</p>
+          <select id="opt-tip" data-choice="tip"></select>
+          <h2 class="subhead">Tip width</h2>
+          <select id="opt-tipSize" data-choice="tipSize"></select>
+        </fieldset>
+
+        <fieldset id="section-ferrule">
+          <legend>Ferrule</legend>
+          <p class="help">The ferrule protects the end of the shaft.</p>
+          <select id="opt-ferrule" data-choice="ferrule"></select>
+        </fieldset>
+
+        <fieldset id="section-weight">
+          <legend>Weight</legend>
+          <p id="weight-help" class="help"></p>
+          <label class="weight">
+            <span>Weight</span>
+            <output id="weight-out" for="weight"></output>
+            <input id="weight" type="range" min="17" max="22" step="0.5" value="19">
+          </label>
+        </fieldset>
+      </form>
+
+      <section class="stage" aria-label="Cue preview">
+        <div class="stage-model">
+          <div class="stage-tools">
+            <div class="view-tools" role="group" aria-label="Cue view">
+              <button type="button" data-view="top" aria-pressed="false">Top</button>
+              <button type="button" data-view="right" aria-pressed="false">Right</button>
+              <button type="button" data-view="iso" aria-pressed="false">Isometric</button>
+            </div>
+            <div class="view-tools">
+              <button type="button" id="render-model">Render Model</button>
+              <button type="button" id="shaft-toggle" aria-pressed="false">Show shaft</button>
+            </div>
+          </div>
+          <canvas id="cue" aria-label="Three-dimensional cue. Drag to rotate. Right-click drag to pan."></canvas>
+          <p id="stage-caption" class="stage-caption">Drag to rotate. Right-click drag to pan. Scroll to zoom. Drag a wood onto the cue.</p>
+          <div class="legend">
+            <button type="button" data-goto="section-points">Forearm</button>
+            <button type="button" data-goto="section-butt">Butt</button>
+            <button type="button" data-goto="section-wrap">Wrap</button>
+            <button type="button" data-goto="section-rings">Rings</button>
+            <button type="button" data-goto="section-joint">Joint</button>
+            <button type="button" data-goto="section-shaft">Shaft</button>
+            <button type="button" data-goto="section-tip">Tip</button>
+            <button type="button" data-goto="section-ferrule">Ferrule</button>
+            <button type="button" data-goto="section-weight">Weight</button>
+          </div>
+        </div>
+        <div class="stage-woods">
+          <div class="wood-label">
+            <h2 class="subhead wood-head">Woods</h2>
+            <p class="stage-caption">Every wood is here. Drag one onto the cue.</p>
+          </div>
+          <div id="opt-woods" class="swatches wood-tray"></div>
+        </div>
+      </section>
+
+      <aside class="spec" id="spec">
+        <p class="spec-kicker">Shop estimate</p>
+        <p id="estimate" class="estimate">$0</p>
+        <label class="name-label" for="cue-name">Cue name
+          <input id="cue-name" maxlength="40" autocomplete="off">
+        </label>
+        <p id="playing" class="playing"></p>
+        <ul id="lines" class="lines"></ul>
+        <section id="ring-design-sheet" class="ring-design-sheet" hidden>
+          <h2>Ring design</h2>
+          <div id="ring-design-print"></div>
+        </section>
+        <p class="disclaimer">One-off shop estimate. This page does not take payment.</p>
+        <div class="actions">
+          <button type="button" id="ring-design">Ring Design</button>
+          <button type="button" id="copy-spec">Copy build sheet</button>
+          <button type="button" id="print-spec" class="secondary">Print</button>
+          <button type="button" id="reset-spec" class="secondary">Reset</button>
+        </div>
+      </aside>
+  </main>
+
+  <p class="shop-note">Prices, woods, and presets are in catalog.js. The model is in cue3d.js. The taper and which lines get charged are in app.js.</p>
+  <div class="price-bar" id="price-bar">
+    <span id="bar-name">Cue</span>
+    <strong id="bar-price">$0</strong>
+  </div>
+  <p id="summary-live" class="sr-only" aria-live="polite"></p>
+  <dialog id="render-dialog">
+    <div class="render-bar">
+      <p class="render-title">Butt section</p>
+      <p class="render-note">Scroll to zoom. Drag to move.</p>
+      <div class="render-zoom">
+        <button type="button" id="render-out" aria-label="Zoom out">−</button>
+        <button type="button" id="render-fit">Fit</button>
+        <button type="button" id="render-in" aria-label="Zoom in">+</button>
+      </div>
+      <button type="button" id="render-close">Close</button>
+    </div>
+    <canvas id="render-view" aria-label="Photorealistic side view of the butt. Scroll to zoom. Drag to move."></canvas>
+  </dialog>
+  <dialog id="epoxy-dialog">
+    <p class="epoxy-title">Epoxy color</p>
+    <label class="epoxy-label">Color
+      <input id="epoxy-color" type="color" value="#3e8f86">
+    </label>
+    <button type="button" id="epoxy-done">Done</button>
+  </dialog>
+
+  <dialog id="ring-design-dialog">
+    <div class="render-bar">
+      <p class="render-title">Ring design</p>
+      <button type="button" id="ring-design-close">Close</button>
+    </div>
+    <div class="ring-design-body">
+      <p id="ring-design-empty">No ring design has been added.</p>
+      <div id="ring-design-detail" hidden></div>
+    </div>
+  </dialog>
+
+  <script src="catalog.js?v=14"></script>
+  <script src="cue3d.js?v=13"></script>
+  <script src="logo-mark.js?v=1"></script>
+  <script src="app.js?v=57"></script>
+</body>
+</html>
