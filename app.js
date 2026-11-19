@@ -727,12 +727,24 @@ function lineItems(current, standardRings) {
   const items = [
     { label: `Forearm/Butt blank, ${butt.name}`, amount: catalog.basePrice + butt.price },
     { label: `Forearm points, ${points.name.toLowerCase()}`, amount: pointCharge(points.count, false) },
+    {
+      label: Number(veneers.id) > 0 ? veneers.name : "No veneers",
+      amount: veneerCharge(points.count, Number(veneers.id), false),
+    },
+  ];
+  ["1st veneer", "2nd veneer", "3rd veneer"].slice(0, Number(veneers.id)).forEach((layer, index) => {
+    const veneerColor = find(catalog.veneerColors, current[`veneer${index + 1}`]);
+    items.push({ label: `${layer}, ${veneerColor.name.toLowerCase()}`, amount: 0 });
+  });
+  items.push(
+    { label: `${pointMaterialLabel(inlay, current)} point material`, amount: inlay.price },
+    { label: `Points stop ${current.pointReach} in from the handle`, amount: 0 },
     { label: profile.name, amount: profile.price },
     {
       label: cap.id === "wood" ? `${capWood.name} butt cap` : `${cap.name} butt cap`,
       amount: cap.price,
     },
-  ];
+  );
   const sleevePoints = find(catalog.points, current.sleevePoints);
   if (sleevePoints.id === "none") {
     items.push({ label: "Plain butt sleeve", amount: 0 });
@@ -765,16 +777,6 @@ function lineItems(current, standardRings) {
       amount: handle.id === butt.id ? 0 : handle.price,
     });
   }
-  items.push({
-    label: Number(veneers.id) > 0 ? veneers.name : "No veneers",
-    amount: veneerCharge(points.count, Number(veneers.id), false),
-  });
-  items.push({ label: `${pointMaterialLabel(inlay, current)} point material`, amount: inlay.price });
-  items.push({ label: `Points stop ${current.pointReach} in from the handle`, amount: 0 });
-  ["1st veneer", "2nd veneer", "3rd veneer"].slice(0, Number(veneers.id)).forEach((layer, index) => {
-    const color = find(catalog.veneerColors, current[`veneer${index + 1}`]);
-    items.push({ label: `${layer}, ${color.name.toLowerCase()}`, amount: 0 });
-  });
   items.push(
     { label: `${joint.name} joint`, amount: joint.price },
     {
