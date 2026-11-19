@@ -1238,19 +1238,21 @@ function submitDesign() {
     form.append("_subject", subject);
     form.append("_captcha", "false");
     form.append("message", buildSheetText());
-    form.append("attachment", pdf, designFileName());
-    return fetch("https://formsubmit.co/ajax/builds@repaskycustomcues.com", {
+    form.append("attachment", new File([pdf], designFileName(), { type: "application/pdf" }));
+    return fetch("https://formsubmit.co/builds@repaskycustomcues.com", {
       method: "POST",
-      headers: { Accept: "application/json" },
       body: form,
     });
   }).then(async (response) => {
-    const result = await response.json();
-    if (String(result.success) === "true") {
+    const body = await response.text();
+    let result = {};
+    try { result = JSON.parse(body); } catch (error) { result = {}; }
+    const sent = String(result.success) === "true" || (response.ok && /<h1[^>]*>\s*Thanks!/i.test(body));
+    if (sent) {
       button.textContent = "Sent";
       return;
     }
-    if (/activ/i.test(result.message || "")) {
+    if (/activ/i.test(result.message || body)) {
       button.textContent = previous;
       note.hidden = false;
       note.textContent = "Open the activation email sent to builds@repaskycustomcues.com, then submit the design again.";
