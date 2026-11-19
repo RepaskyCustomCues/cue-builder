@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Repasky Custom Cues Cue Builder</title>
-  <link rel="stylesheet" href="styles.css?v=25">
+  <link rel="stylesheet" href="styles.css?v=27">
 </head>
 <body>
   <header class="page-header">
@@ -161,6 +161,10 @@
               <button type="button" data-view="right" aria-pressed="false">Right</button>
               <button type="button" data-view="iso" aria-pressed="false">Isometric</button>
             </div>
+            <div class="view-tools zoom-tools" role="group" aria-label="Cue zoom">
+              <button type="button" id="cue-zoom-in" aria-label="Zoom in">+</button>
+              <button type="button" id="cue-zoom-out" aria-label="Zoom out">−</button>
+            </div>
             <div class="view-tools">
               <button type="button" id="render-model">Render Model</button>
               <button type="button" id="shaft-toggle" aria-pressed="false">Show shaft</button>
@@ -252,9 +256,9 @@
   </dialog>
 
   <script src="catalog.js?v=14"></script>
-  <script src="cue3d.js?v=13"></script>
+  <script src="cue3d.js?v=14"></script>
   <script src="logo-mark.js?v=1"></script>
   <script src="html2pdf.bundle.min.js?v=1"></script>
-  <script src="app.js?v=68"></script>
+  <script src="app.js?v=69"></script>
 </body>
 </html>

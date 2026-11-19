@@ -24,7 +24,7 @@ function createCueView() {
   if (!gl) {
     const note = document.getElementById("stage-caption");
     if (note) note.textContent = "This browser cannot show the 3D cue.";
-    return { update() {}, setAtlas() {}, setAtlasPixels() {}, setWoodImages() {}, pick() { return null; }, setView() {}, watchView() {} };
+    return { update() {}, setAtlas() {}, setAtlasPixels() {}, setWoodImages() {}, pick() { return null; }, setView() {}, watchView() {}, nudgeZoom() {} };
   }
 
   const program = programFrom(gl, VERT_SRC, FRAG_SRC);
@@ -105,6 +105,18 @@ function createCueView() {
     clampPan();
     zoom = next;
   }, { passive: false });
+
+  function nudgeZoom(direction) {
+    const next = Math.min(2.4, Math.max(MIN_ZOOM, zoom * (direction < 0 ? 0.8 : 1.25)));
+    if (next === zoom) return;
+    if (next > zoom) {
+      const pull = zoom / next;
+      panX *= pull;
+      panY *= pull;
+    }
+    zoom = next;
+    clampPan();
+  }
   canvas.tabIndex = 0;
   canvas.addEventListener("keydown", (event) => {
     if (event.key === "ArrowLeft") yaw -= 0.14;
@@ -616,7 +628,7 @@ function createCueView() {
     atlas = next;
   }
 
-  return { update, setAtlas, setAtlasPixels, setWoodImages, pick, setView, watchView(fn) { viewListener = fn; } };
+  return { update, setAtlas, setAtlasPixels, setWoodImages, pick, setView, nudgeZoom, watchView(fn) { viewListener = fn; } };
 }
 
 function programFrom(gl, vert, frag) {

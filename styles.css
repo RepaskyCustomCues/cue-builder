@@ -115,6 +115,8 @@ h1 {
   gap: 8px;
 }
 
+.zoom-tools { display: none; }
+
 .view-tools button[aria-pressed="true"] {
   border-color: var(--ink);
   background: var(--ink);
@@ -849,9 +851,11 @@ select[data-choice]:disabled { opacity: 0.45; }
   .stage-model { min-height: 52vh; }
   #cue { height: auto; min-height: 42vh; }
   .stage-tools { flex-wrap: wrap; }
+  .zoom-tools { display: flex; }
   .stage-tools button { padding: 10px 12px; }
   .legend button { padding: 8px 0; }
   .stage-woods { flex: none; min-height: 188px; overflow: visible; }
+  .wood-label { flex-direction: column; align-items: flex-start; gap: 0; }
   .wood-label .stage-caption { white-space: normal; }
   .swatches.wood-tray { overflow-x: auto; }
   .wood-tray .swatch {

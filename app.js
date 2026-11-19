@@ -163,6 +163,8 @@ function init() {
   document.querySelectorAll("[data-view]").forEach((button) => {
     button.addEventListener("click", () => CueView.setView(button.dataset.view));
   });
+  document.getElementById("cue-zoom-in").addEventListener("click", () => CueView.nudgeZoom(-1));
+  document.getElementById("cue-zoom-out").addEventListener("click", () => CueView.nudgeZoom(1));
   CueView.watchView((name) => {
     document.querySelectorAll("[data-view]").forEach((button) => {
       button.setAttribute("aria-pressed", String(button.dataset.view === name));
