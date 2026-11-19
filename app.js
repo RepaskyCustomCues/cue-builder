@@ -1143,24 +1143,107 @@ function buildSheetText() {
   return lines.join("\n");
 }
 
+function designFileName() {
+  const name = (state.name || "Cue").replace(/[^\w .()-]+/g, "").trim() || "Cue";
+  return `${name} build sheet.pdf`;
+}
+
+function waitFrame() {
+  return new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+}
+
+async function buildPrintPdf() {
+  const canvas = document.getElementById("cue");
+  const stage = canvas.closest(".stage");
+  const model = canvas.parentElement;
+  const saved = {
+    stageHeight: stage.style.height,
+    stageOverflow: stage.style.overflow,
+    modelHeight: model.style.height,
+    canvasFlex: canvas.style.flex,
+  };
+  stage.style.height = "auto";
+  stage.style.overflow = "visible";
+  model.style.height = "auto";
+  canvas.style.flex = "none";
+  window.dispatchEvent(new Event("beforeprint"));
+  await waitFrame();
+  const picture = canvas.toDataURL("image/png");
+  window.dispatchEvent(new Event("afterprint"));
+  stage.style.height = saved.stageHeight;
+  stage.style.overflow = saved.stageOverflow;
+  model.style.height = saved.modelHeight;
+  canvas.style.flex = saved.canvasFlex;
+
+  const sheet = document.createElement("div");
+  sheet.style.width = "720px";
+  sheet.style.background = "#fff";
+  sheet.style.color = "#111";
+
+  const figure = document.createElement("div");
+  figure.style.breakAfter = "page";
+  figure.style.pageBreakAfter = "always";
+  figure.style.background = "#fff";
+  const image = document.createElement("img");
+  image.src = picture;
+  image.alt = "";
+  image.style.display = "block";
+  image.style.width = "720px";
+  image.style.height = "auto";
+  image.style.background = "#fff";
+  figure.append(image);
+  await image.decode();
+
+  const spec = document.getElementById("spec").cloneNode(true);
+  const name = spec.querySelector("#cue-name");
+  if (name) name.value = state.name || "";
+  spec.querySelectorAll(".actions, #submit-note").forEach((node) => node.remove());
+  const ringSheet = spec.querySelector("#ring-design-sheet");
+  if (ringSheet) {
+    ringSheet.hidden = false;
+    ringSheet.style.display = "block";
+  }
+  spec.querySelectorAll("[id]").forEach((node) => node.removeAttribute("id"));
+  spec.style.border = "0";
+  spec.style.overflow = "visible";
+  spec.style.background = "#fff";
+  sheet.append(figure, spec);
+  document.body.append(sheet);
+  await image.decode();
+  sheet.getBoundingClientRect();
+  try {
+    return await html2pdf().set({
+      margin: [0.4, 0.4, 0.4, 0.4],
+      image: { type: "jpeg", quality: 0.92 },
+      html2canvas: { scale: 2, backgroundColor: "#ffffff", useCORS: true },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      pagebreak: { mode: ["css", "legacy"] },
+    }).from(sheet).outputPdf("blob");
+  } finally {
+    sheet.remove();
+  }
+}
+
 function submitDesign() {
   const button = document.getElementById("submit-design");
   const note = document.getElementById("submit-note");
   const previous = button.textContent;
   button.disabled = true;
-  button.textContent = "Sending…";
+  button.textContent = "Preparing…";
   note.hidden = true;
   const subject = `Cue design: ${state.name || "Untitled cue"}`;
-  fetch("https://formsubmit.co/ajax/builds@repaskycustomcues.com", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({
-      _subject: subject,
-      _captcha: "false",
-      _template: "box",
-      cue: state.name || "Untitled cue",
-      message: buildSheetText(),
-    }),
+  buildPrintPdf().then((pdf) => {
+    button.textContent = "Sending…";
+    const form = new FormData();
+    form.append("_subject", subject);
+    form.append("_captcha", "false");
+    form.append("message", buildSheetText());
+    form.append("attachment", pdf, designFileName());
+    return fetch("https://formsubmit.co/ajax/builds@repaskycustomcues.com", {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: form,
+    });
   }).then(async (response) => {
     const result = await response.json();
     if (String(result.success) === "true") {
