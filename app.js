@@ -1144,9 +1144,46 @@ function buildSheetText() {
 }
 
 function submitDesign() {
+  const button = document.getElementById("submit-design");
+  const note = document.getElementById("submit-note");
+  const previous = button.textContent;
+  button.disabled = true;
+  button.textContent = "Sending…";
+  note.hidden = true;
   const subject = `Cue design: ${state.name || "Untitled cue"}`;
-  const href = `mailto:builds@repaskycustomcues.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildSheetText())}`;
-  window.location.href = href;
+  fetch("https://formsubmit.co/ajax/builds@repaskycustomcues.com", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({
+      _subject: subject,
+      _captcha: "false",
+      _template: "box",
+      cue: state.name || "Untitled cue",
+      message: buildSheetText(),
+    }),
+  }).then(async (response) => {
+    const result = await response.json();
+    if (String(result.success) === "true") {
+      button.textContent = "Sent";
+      return;
+    }
+    if (/activ/i.test(result.message || "")) {
+      button.textContent = previous;
+      note.hidden = false;
+      note.textContent = "Open the activation email sent to builds@repaskycustomcues.com, then submit the design again.";
+      return;
+    }
+    throw new Error(result.message || "send failed");
+  }).catch(() => {
+    button.textContent = "Could not send";
+  }).finally(() => {
+    window.setTimeout(() => {
+      button.disabled = false;
+      if (button.textContent === "Sent" || button.textContent === "Could not send") {
+        button.textContent = previous;
+      }
+    }, 1600);
+  });
 }
 
 async function copySpec() {
