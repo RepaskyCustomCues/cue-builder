@@ -32,6 +32,7 @@ let jointEndRenderedFor = null;
 let lastItems = [];
 let woodsReady = false;
 let draggedWood = null;
+let selectedWood = null;
 let shaftShown = false;
 let woodLayout = null;
 let renderScene = null;
@@ -176,6 +177,9 @@ function init() {
   document.getElementById("render-fit").addEventListener("click", fitRenderView);
   bindRenderView();
   bindWoodDrop();
+  bindWoodTap();
+  applyPhoneWoods();
+  window.matchMedia("(max-width: 860px)").addEventListener("change", applyPhoneWoods);
 
   uploadWoodAtlas(bakeWoodAtlas());
   commit();
@@ -299,7 +303,12 @@ function paintShaftToggle() {
   button.setAttribute("aria-pressed", shaftShown ? "true" : "false");
 }
 
+function phoneLayout() {
+  return window.matchMedia("(max-width: 860px)").matches;
+}
+
 function stageCaption() {
+  if (phoneLayout()) return "Drag to turn the cue. Tap a wood, then tap where it goes.";
   return "Drag to rotate. Right-click drag to pan. Scroll to zoom. Drag a wood onto the cue.";
 }
 
@@ -337,11 +346,63 @@ function bindWoodDrop() {
   });
 }
 
-function placeUnderCursor(clientX, clientY) {
-  if (!draggedWood || !CueView.pick) return null;
+function placeUnderCursor(clientX, clientY, wood = draggedWood) {
+  if (!wood || !CueView.pick) return null;
   const hit = CueView.pick(clientX, clientY);
   if (!hit) return null;
-  return woodPlace(draggedWood, hit.x);
+  return woodPlace(wood, hit.x);
+}
+
+function bindWoodTap() {
+  const canvas = document.getElementById("cue");
+  let start = null;
+  canvas.addEventListener("pointerdown", (event) => {
+    if (!selectedWood || event.button !== 0) return;
+    start = { x: event.clientX, y: event.clientY, id: event.pointerId };
+  });
+  canvas.addEventListener("pointerup", (event) => {
+    if (!start || start.id !== event.pointerId || !selectedWood) return;
+    const moved = Math.hypot(event.clientX - start.x, event.clientY - start.y);
+    const origin = start;
+    start = null;
+    if (moved > 14) return;
+    const place = placeUnderCursor(origin.x, origin.y, selectedWood);
+    const caption = document.getElementById("stage-caption");
+    if (place) {
+      place.apply();
+      commit();
+      caption.textContent = `${selectedWood.name} applied. Tap the cue again, or tap the wood to finish.`;
+    } else {
+      caption.textContent = "That wood does not go on this part of the cue.";
+    }
+  });
+}
+
+function paintArmedWood() {
+  document.querySelectorAll("#opt-woods .swatch").forEach((button) => {
+    const on = Boolean(selectedWood && button.dataset.id === selectedWood.id);
+    button.classList.toggle("is-armed", on);
+    button.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+}
+
+function paintWoodHint() {
+  const hint = document.querySelector(".stage-woods .stage-caption");
+  if (!hint) return;
+  hint.textContent = phoneLayout()
+    ? "Tap a wood, then tap the cue where it goes."
+    : "Every wood is here. Drag one onto the cue.";
+}
+
+function applyPhoneWoods() {
+  const phone = phoneLayout();
+  document.querySelectorAll("#opt-woods .swatch").forEach((button) => {
+    button.draggable = !phone;
+  });
+  if (!phone) selectedWood = null;
+  paintArmedWood();
+  paintWoodHint();
+  if (!selectedWood) document.getElementById("stage-caption").textContent = stageCaption();
 }
 
 function woodPlace(wood, x) {
@@ -1018,13 +1079,27 @@ function optionButton(group, item, showPrice) {
   }
   button.append(name);
   if (group === "palette") {
-    button.draggable = true;
+    button.draggable = !phoneLayout();
     button.addEventListener("dragstart", (event) => {
+      if (phoneLayout()) {
+        event.preventDefault();
+        return;
+      }
       draggedWood = { group, id: item.id, name: item.name };
       event.dataTransfer.setData("text/plain", `${group}:${item.id}`);
       event.dataTransfer.effectAllowed = "copy";
     });
     button.addEventListener("dragend", endWoodDrag);
+    button.addEventListener("click", () => {
+      if (!phoneLayout()) return;
+      selectedWood = selectedWood && selectedWood.id === item.id
+        ? null
+        : { group, id: item.id, name: item.name };
+      paintArmedWood();
+      document.getElementById("stage-caption").textContent = selectedWood
+        ? `Tap the cue where ${item.name} goes.`
+        : stageCaption();
+    });
   }
   if (showPrice) {
     const price = document.createElement("span");
@@ -1049,6 +1124,7 @@ function paintSelection() {
     button.classList.toggle("is-selected", on);
     button.setAttribute("aria-pressed", String(on));
   });
+  paintArmedWood();
   const pointsOff = state.points === "none";
   const veneersOff = pointsOff && state.sleevePoints === "none";
   const veneerCount = veneersOff ? 0 : Number(state.veneers);

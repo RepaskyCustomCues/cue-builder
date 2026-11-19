@@ -235,6 +235,11 @@ function bindControls() {
     const row = event.target.closest(".layer");
     if (!row) return;
     const id = Number(row.dataset.id);
+    if (event.target.closest("[data-move]")) {
+      const move = event.target.closest("[data-move]");
+      shiftLayer(id, move.dataset.move === "down" ? 1 : -1);
+      return;
+    }
     if (event.target.dataset.remove != null) {
       design.layers = design.layers.filter((layer) => layer.id !== id);
       if (design.selectedId === id) design.selectedId = design.centerId;
@@ -245,6 +250,11 @@ function bindControls() {
     publish();
   });
   bindStackDrag();
+  paintStackNote();
+  window.matchMedia("(max-width: 860px)").addEventListener("change", () => {
+    paintStackNote();
+    drawStack();
+  });
   document.getElementById("undo-ring").addEventListener("click", undoDesign);
   document.getElementById("copy-ring").addEventListener("click", () => {
     duplicateStack();
@@ -542,6 +552,21 @@ function bindStackDrag() {
   });
 }
 
+function paintStackNote() {
+  const note = document.getElementById("stack-note");
+  if (!note) return;
+  note.textContent = window.matchMedia("(max-width: 860px)").matches
+    ? "Use Up and Down to change the order. Butt side is above the center. Joint side is below it."
+    : "Drag a ring to change its order. Butt side is left. Joint side is right. The center layer stays marked.";
+}
+
+function shiftLayer(id, direction) {
+  const index = design.layers.findIndex((layer) => layer.id === id);
+  const target = index + direction;
+  if (index < 0 || target < 0 || target >= design.layers.length) return;
+  moveLayer(id, design.layers[target].id, direction > 0);
+}
+
 function moveLayer(id, targetId, after) {
   if (id === targetId) return;
   const from = design.layers.findIndex((layer) => layer.id === id);
@@ -562,7 +587,7 @@ function drawStack() {
   stackList.replaceChildren(...design.layers.map((layer, index) => {
     const material = materialById(layer.material);
     const row = document.createElement("li");
-    row.draggable = true;
+    row.draggable = !window.matchMedia("(max-width: 860px)").matches;
     row.dataset.id = String(layer.id);
     const button = document.createElement("div");
     button.className = `layer${layer.id === design.selectedId ? " is-selected" : ""}`;
@@ -587,6 +612,24 @@ function drawStack() {
         : `${size} in · Plain`;
     text.append(title, detail);
     button.append(swatch, text);
+    if (window.matchMedia("(max-width: 860px)").matches) {
+      const moves = document.createElement("span");
+      moves.className = "layer-move";
+      const up = document.createElement("button");
+      up.type = "button";
+      up.dataset.move = "up";
+      up.textContent = "Up";
+      up.disabled = index === 0;
+      up.setAttribute("aria-label", "Move this ring toward the butt");
+      const down = document.createElement("button");
+      down.type = "button";
+      down.dataset.move = "down";
+      down.textContent = "Down";
+      down.disabled = index === design.layers.length - 1;
+      down.setAttribute("aria-label", "Move this ring toward the joint");
+      moves.append(up, down);
+      button.append(moves);
+    }
     if (layer.id !== design.centerId) {
       const remove = document.createElement("button");
       remove.type = "button";

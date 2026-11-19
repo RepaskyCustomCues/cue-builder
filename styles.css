@@ -834,7 +834,10 @@ select[data-choice]:disabled { opacity: 0.45; }
 .is-attention { animation: attention 0.8s ease; }
 
 @media (max-width: 860px) {
-  body { display: block; height: auto; overflow: visible; padding-bottom: 64px; }
+  body { display: block; height: auto; overflow: visible; padding-bottom: 72px; }
+  .page-header { align-items: flex-start; }
+  .logo { width: 56px; height: 56px; }
+  h1 { font-size: 1.25rem; }
   .layout {
     display: flex;
     flex-direction: column;
@@ -842,8 +845,22 @@ select[data-choice]:disabled { opacity: 0.45; }
   }
   #builder,
   .spec { overflow: visible; }
-  .stage { order: -1; height: 78vh; margin-bottom: 16px; }
-  #cue { height: auto; }
+  .stage { order: -1; height: auto; margin-bottom: 16px; }
+  .stage-model { min-height: 52vh; }
+  #cue { height: auto; min-height: 42vh; }
+  .stage-tools { flex-wrap: wrap; }
+  .stage-tools button { padding: 10px 12px; }
+  .legend button { padding: 8px 0; }
+  .stage-woods { flex: none; min-height: 188px; overflow: visible; }
+  .wood-label .stage-caption { white-space: normal; }
+  .swatches.wood-tray { overflow-x: auto; }
+  .wood-tray .swatch {
+    flex: 0 0 104px;
+    width: 104px;
+    height: 148px;
+  }
+  .wood-tray .swatch.is-armed { box-shadow: inset 0 0 0 3px #fff; }
+  .actions button { flex: 1 1 calc(50% - 8px); padding: 12px 10px; }
   .price-bar {
     position: fixed;
     right: 0;
@@ -856,6 +873,9 @@ select[data-choice]:disabled { opacity: 0.45; }
     background: var(--ink);
     color: var(--paper);
   }
+  .render-bar { flex-wrap: wrap; }
+  .ring-design-views { grid-template-columns: 1fr; }
+  .ring-design-views .wide { grid-column: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -470,6 +470,8 @@ canvas {
 
 @media (max-width: 860px) {
   body { height: auto; overflow: auto; display: block; }
+  .page-header { align-items: flex-start; }
+  h1 { font-size: 1.25rem; }
   .designer { grid-template-columns: 1fr; margin-bottom: 20px; }
   .controls, .sheet, .material-tray { overflow: visible; }
   .stage { display: block; }
@@ -477,10 +479,17 @@ canvas {
   .sheet { display: block; }
   #materials { display: block; }
   .material-tray .material-group { display: block; flex: none; }
-  .material-tiles { height: 72px; }
+  .material-tiles { height: 92px; }
   .views { display: grid; grid-template-columns: 1fr; grid-template-rows: none; }
   figure { display: block; }
   canvas { height: 240px; flex: none; }
-  .iso canvas { height: 340px; }
+  .iso canvas { height: 300px; }
   .iso { grid-column: auto; }
+  .titleblock { grid-template-columns: 1fr; }
+  .titleblock .stack-positions { flex-wrap: wrap; justify-content: flex-start; }
+  .titleblock .title-actions { justify-self: stretch; flex-wrap: wrap; }
+  .modes button, .add-row button, .layer-move button { min-height: 40px; }
+  .layer-move { display: flex; gap: 4px; }
+  .layer { grid-template-columns: 18px minmax(0, 1fr); }
+  .layer-move, .layer [data-remove] { grid-column: 1 / -1; }
 }
