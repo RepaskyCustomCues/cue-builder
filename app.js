@@ -745,10 +745,13 @@ function lineItems(current, standardRings) {
       amount: veneerCharge(sleevePoints.count, Number(veneers.id), true),
     });
   }
-  const buttRing = find(catalog.rings, current.buttRing);
-  const sleeveRing = find(catalog.rings, current.sleeveRing);
-  pushRingLine(items, "buttRing", buttRing, "No butt ring", "Butt ring", standardRings);
-  pushRingLine(items, "sleeveRing", sleeveRing, "No sleeve ring", "Sleeve ring", standardRings);
+  pushRingLine(items, "buttRing", find(catalog.rings, current.buttRing), "No butt ring", "Butt ring", standardRings);
+  pushRingLine(items, "sleeveRing", find(catalog.rings, current.sleeveRing), "No sleeve ring", "Sleeve ring", standardRings);
+  pushRingLine(items, "aJointRing", aJoint, "No A-Joint ring", "A-Joint ring", standardRings);
+  pushRingLine(items, "rings", rings, "No joint ring", "Joint ring", standardRings);
+  if (shaftTakesRing(current)) {
+    pushRingLine(items, "shaftRing", find(catalog.rings, current.shaftRing), "No shaft ring", "Shaft ring", standardRings);
+  }
   items.push(
     { label: wrap.id === "none" ? "No wrap" : `${wrap.name} wrap`, amount: wrap.price },
   );
@@ -772,11 +775,6 @@ function lineItems(current, standardRings) {
     const color = find(catalog.veneerColors, current[`veneer${index + 1}`]);
     items.push({ label: `${layer}, ${color.name.toLowerCase()}`, amount: 0 });
   });
-  pushRingLine(items, "aJointRing", aJoint, "No A-Joint ring", "A-Joint ring", standardRings);
-  pushRingLine(items, "rings", rings, "No joint ring", "Joint ring", standardRings);
-  if (shaftTakesRing(current)) {
-    pushRingLine(items, "shaftRing", find(catalog.rings, current.shaftRing), "No shaft ring", "Shaft ring", standardRings);
-  }
   items.push(
     { label: `${joint.name} joint`, amount: joint.price },
     {
@@ -1383,9 +1381,6 @@ function pushRingLine(items, position, standard, noneLabel, title, standardRings
       amount: 50 * inlaid,
     });
   }
-  custom.layers.forEach((layer) => {
-    items.push({ label: ringLayerLine(layer), amount: 0 });
-  });
 }
 
 function shaftTakesRing(current) {
