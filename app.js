@@ -142,6 +142,7 @@ function init() {
     commit();
   });
   document.getElementById("copy-spec").addEventListener("click", copySpec);
+  document.getElementById("submit-design").addEventListener("click", submitDesign);
   document.getElementById("ring-design").addEventListener("click", openRingDesign);
   document.getElementById("ring-design-close").addEventListener("click", () => {
     document.getElementById("ring-design-dialog").close();
@@ -1132,15 +1133,25 @@ function renderSpec(items) {
   syncRingDesignSheet();
 }
 
-async function copySpec() {
-  const button = document.getElementById("copy-spec");
+function buildSheetText() {
   const playing = document.getElementById("playing").textContent;
   const lines = [state.name, "", playing, ""];
   for (const item of lastItems) {
     lines.push(`${item.label} — ${item.amount ? money(item.amount) : "Included"}`);
   }
   lines.push("", `Estimate — ${money(totalOf(lastItems))}`);
-  const text = lines.join("\n");
+  return lines.join("\n");
+}
+
+function submitDesign() {
+  const subject = `Cue design: ${state.name || "Untitled cue"}`;
+  const href = `mailto:builds@repaskycustomcues.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildSheetText())}`;
+  window.location.href = href;
+}
+
+async function copySpec() {
+  const button = document.getElementById("copy-spec");
+  const text = buildSheetText();
   try {
     await navigator.clipboard.writeText(text);
   } catch (error) {
