@@ -1293,6 +1293,8 @@ async function buildPrintPdf() {
   image.style.width = "720px";
   image.style.height = "auto";
   image.style.background = "#fff";
+  image.style.border = "1px solid #111111";
+  image.style.boxSizing = "border-box";
   figure.append(image);
   await image.decode();
 

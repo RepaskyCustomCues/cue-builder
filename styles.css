@@ -516,6 +516,30 @@ select[data-choice]:disabled { opacity: 0.45; }
   text-transform: uppercase;
 }
 
+.estimate-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+}
+
+.estimate-brand img {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: cover;
+}
+
+.estimate-brand p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
 .estimate {
   margin: 4px 0 12px;
   font-family: var(--serif);
@@ -992,6 +1016,8 @@ select[data-choice]:disabled { opacity: 0.45; }
     height: 7.4in;
     max-height: 7.4in;
     background: #fff;
+    border: 1px solid #111;
+    box-sizing: border-box;
   }
   .ring-design-sheet {
     display: block;
