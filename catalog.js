@@ -174,7 +174,7 @@ window.CUE_CATALOG = {
   ],
   tapers: [
     { id: "pro", name: "Pro taper", price: 0, note: "Slims sooner, so the shaft feels lighter through the stroke." },
-    { id: "conical", name: "Conical (European)", price: 0, note: "Even taper from the joint to the tip." },
+    { id: "conical", name: "Conical (European) taper", price: 0, note: "Even taper from the joint to the tip." },
   ],
   ferrules: [
     { id: "white", name: "White fiber", price: 0, fill: "#f4f4f2" },

@@ -790,7 +790,7 @@ function lineItems(current, standardRings) {
     const shaftLength = find(catalog.shaftLengths, current.shaftLength);
     items.push(
       { label: `${shaftLength.name} shaft`, amount: 0 },
-      { label: `${taper.name} taper`, amount: taper.price },
+      { label: taper.name, amount: taper.price },
       { label: `${ferrule.name} ferrule`, amount: ferrule.price },
       { label: `${tip.name} tip`, amount: tip.price },
       { label: `${find(catalog.tipBrands, current.tipBrand).name} tip brand`, amount: 0 },
