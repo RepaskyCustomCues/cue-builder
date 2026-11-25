@@ -1,3 +1,4 @@
+/* Copyright 2026, Michael E. Repasky, Repasky Custom Cues. */
 /* Drawing, estimate, and page behavior.
    lineItems() decides what gets charged.
    cueLayout() places the parts in real inches. */

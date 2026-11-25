@@ -1,3 +1,4 @@
+Copyright 2026, Michael E. Repasky, Repasky Custom Cues.
 Set-Location C:\path\to\CueBuilder
 $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add('http://127.0.0.1:8765/')

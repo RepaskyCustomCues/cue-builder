@@ -1,3 +1,4 @@
+/* Copyright 2026, Michael E. Repasky, Repasky Custom Cues. */
 /* Menu and shop estimate.
    Add a wood, wrap, joint, or price here and the page rebuilds the buttons.
    grain must be one of: straight, curly, eyes, streak.

@@ -1,3 +1,4 @@
+# Copyright 2026, Michael E. Repasky, Repasky Custom Cues.
 Add-Type -ReferencedAssemblies System.Drawing -TypeDefinition @"
 using System;
 using System.Drawing;

@@ -1,3 +1,4 @@
+/* Copyright 2026, Michael E. Repasky, Repasky Custom Cues. */
 const RING_OD = 1;
 const RING_ID = 0.625;
 

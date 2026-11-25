@@ -1,3 +1,4 @@
+/* Copyright 2026, Michael E. Repasky, Repasky Custom Cues. */
 const STORAGE_KEY = "cuebuilder.ring-designer.v2";
 const THICKNESS_CHOICES = {
   fiber: [0.015, 0.032, 0.063, 0.090],

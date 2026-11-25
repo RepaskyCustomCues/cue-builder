@@ -1,3 +1,4 @@
+/* Copyright 2026, Michael E. Repasky, Repasky Custom Cues. */
 /* Rotatable cue. Drag to turn it. Right-drag to pan. Scroll to zoom. */
 
 function createCueView() {
