@@ -707,8 +707,8 @@ function money(amount) {
 /* Shop estimate. Each chosen option adds its own price.
    Wrap color is skipped when there is no wrap.
    Point material and veneers are skipped when that section is plain.
-   A point is $25. Each veneer is another $25 on that point. No veneers add nothing.
-   Butt sleeve points use that same wood and those same veneers at half that price.
+   A point is $50, on the forearm and on the butt sleeve. Each veneer is another $25 on that point. No veneers add nothing.
+   Butt sleeve veneers and point material are half the forearm price.
    The forearm and butt are one blank: $250 in hard maple, plus that wood's price for any other wood.
    Weight inside the included band does not add a charge. */
 function lineItems(current, standardRings) {
@@ -731,7 +731,7 @@ function lineItems(current, standardRings) {
   const capWood = find(catalog.woods, current.capWood);
   const items = [
     { label: `Forearm/Butt blank, ${butt.name}`, amount: catalog.basePrice + butt.price },
-    { label: `Forearm points, ${points.name.toLowerCase()}`, amount: pointCharge(points.count, false) },
+    { label: `Forearm points, ${points.name.toLowerCase()}`, amount: pointCharge(points.count) },
     {
       label: Number(veneers.id) > 0 ? veneers.name : "No veneers",
       amount: veneerCharge(points.count, Number(veneers.id), false),
@@ -754,7 +754,7 @@ function lineItems(current, standardRings) {
   if (sleevePoints.id === "none") {
     items.push({ label: "Plain butt sleeve", amount: 0 });
   } else {
-    items.push({ label: `Butt sleeve, ${sleevePoints.name.toLowerCase()}`, amount: pointCharge(sleevePoints.count, true) });
+    items.push({ label: `Butt sleeve, ${sleevePoints.name.toLowerCase()}`, amount: pointCharge(sleevePoints.count) });
     items.push({ label: `${pointMaterialLabel(inlay, current)} butt sleeve points, same as the forearm`, amount: inlay.price / 2 });
     items.push({ label: "Butt sleeve points, 3/4 of the sleeve toward the cap", amount: 0 });
     items.push({
@@ -883,7 +883,7 @@ function renderPointCount() {
   select.replaceChildren(...catalog.points.filter((item) => item.id !== "none").map((item) => {
     const option = document.createElement("option");
     option.value = item.id;
-    const amount = pointCharge(item.count, false);
+    const amount = pointCharge(item.count);
     option.textContent = `${item.name} — ${amount ? `+${money(amount)}` : "Included"}`;
     return option;
   }));
@@ -922,7 +922,7 @@ function choiceText(group, item, showPrice) {
     if (item.id === "epoxy") name = pointMaterialLabel(item, state);
   } else if (group === "sleevePoints") {
     const count = item.id === "none" ? 0 : (state.points === "none" ? 4 : find(catalog.points, state.points).count);
-    amount = pointCharge(count, true);
+    amount = pointCharge(count);
   } else if (group === "veneers") {
     const forearm = find(catalog.points, state.points);
     const sleeve = find(catalog.points, state.sleevePoints);
@@ -1114,8 +1114,8 @@ function optionButton(group, item, showPrice) {
   return button;
 }
 
-function pointCharge(count, half) {
-  return count * catalog.pointEach / (half ? 2 : 1);
+function pointCharge(count) {
+  return count * catalog.pointEach;
 }
 
 function veneerCharge(count, layers, half) {

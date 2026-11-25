@@ -98,8 +98,8 @@ window.CUE_CATALOG = {
     { id: "five", name: "Five points", count: 5, swatch: "#221c19" },
     { id: "six", name: "Six points", count: 6, swatch: "#221c19" },
   ],
-  /* Each point is $25. Each veneer is another $25 on each point. Sleeve points are half. */
-  pointEach: 25,
+  /* Each point is $50, on the forearm and the butt sleeve. Each veneer is another $25 on each point. Sleeve veneers are half. */
+  pointEach: 50,
   veneerEach: 25,
   veneerCounts: [
     { id: "0", name: "No veneers" },
