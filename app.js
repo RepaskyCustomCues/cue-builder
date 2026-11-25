@@ -161,6 +161,7 @@ function init() {
   });
   document.querySelector(".legend").addEventListener("click", onGoto);
   document.getElementById("shaft-toggle").addEventListener("click", () => {
+    if (state.shaft === "none") return;
     shaftShown = !shaftShown;
     paintShaftToggle();
     drawCue();
@@ -304,10 +305,20 @@ function onPreset(event) {
 
 function paintShaftToggle() {
   const button = document.getElementById("shaft-toggle");
+  const tip = document.getElementById("shaft-toggle-tip");
   const buttOnly = state.shaft === "none";
-  button.hidden = buttOnly;
-  button.textContent = shaftShown ? "Hide shaft" : "Show shaft";
-  button.setAttribute("aria-pressed", shaftShown ? "true" : "false");
+  const note = "Add a shaft to enable shaft modeling";
+  button.hidden = false;
+  button.disabled = buttOnly;
+  button.textContent = !buttOnly && shaftShown ? "Hide shaft" : "Show shaft";
+  button.setAttribute("aria-pressed", !buttOnly && shaftShown ? "true" : "false");
+  if (buttOnly) {
+    tip.title = note;
+    button.setAttribute("aria-label", `Show shaft. ${note}`);
+  } else {
+    tip.removeAttribute("title");
+    button.removeAttribute("aria-label");
+  }
 }
 
 function phoneLayout() {

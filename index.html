@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Repasky Custom Cues Cue Builder</title>
-  <link rel="stylesheet" href="styles.css?v=32">
+  <link rel="stylesheet" href="styles.css?v=33">
 </head>
 <body>
   <header class="page-header">
@@ -168,7 +168,9 @@
             </div>
             <div class="view-tools">
               <button type="button" id="render-model">Render Model</button>
-              <button type="button" id="shaft-toggle" aria-pressed="false">Show shaft</button>
+              <span id="shaft-toggle-tip">
+                <button type="button" id="shaft-toggle" aria-pressed="false">Show shaft</button>
+              </span>
             </div>
           </div>
           <canvas id="cue" aria-label="Three-dimensional cue. Drag to rotate. Right-click drag to pan."></canvas>
@@ -290,6 +292,6 @@
   <script src="cue3d.js?v=16"></script>
   <script src="logo-mark.js?v=2"></script>
   <script src="html2pdf.bundle.min.js?v=2"></script>
-  <script src="app.js?v=80"></script>
+  <script src="app.js?v=81"></script>
 </body>
 </html>

@@ -142,10 +142,24 @@ a.tool-link {
   text-decoration: none;
 }
 
+#shaft-toggle-tip {
+  display: inline-flex;
+}
+
 #shaft-toggle[aria-pressed="true"] {
   border-color: var(--ink);
   background: var(--ink);
   color: var(--paper);
+}
+
+#shaft-toggle:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+#shaft-toggle-tip:has(#shaft-toggle:disabled) {
+  cursor: not-allowed;
 }
 
 #cue {
